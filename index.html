@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A modern, responsive resume builder. Create, customize, preview and print your resume." />
+  <title>ResumeCraft — Resume Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="ResumeCraft home">
+      <img src="assets/logo.svg" alt="" />
+      <span>resume<span class="brand-accent">craft</span></span>
+    </a>
+    <div class="topbar-actions">
+      <span class="autosave" id="saveStatus"><i></i> Saved in this browser</span>
+      <button class="btn btn-quiet" id="resetBtn" type="button">Start over</button>
+      <button class="btn btn-primary" id="downloadBtn" type="button"><span>↓</span> Save as PDF</button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section class="intro">
+      <div>
+        <p class="eyebrow">YOUR NEXT CHAPTER STARTS HERE</p>
+        <h1>Build a resume that <em>opens doors.</em></h1>
+        <p class="intro-copy">Add your details, choose a style, and create a polished resume in minutes.</p>
+      </div>
+      <div class="step-pill"><span class="step-dot"></span> Live preview <span class="step-divider">·</span> Print-ready</div>
+    </section>
+
+    <div class="workspace">
+      <aside class="editor-panel">
+        <div class="panel-heading">
+          <div><p class="eyebrow">RESUME EDITOR</p><h2>Your information</h2></div>
+          <span class="progress-label" id="completionLabel">0% complete</span>
+        </div>
+        <div class="progress-track"><div id="progressBar"></div></div>
+
+        <div class="section-nav" role="tablist" aria-label="Resume sections">
+          <button class="section-tab active" data-section="personal" role="tab" aria-selected="true">01 <span>Personal</span></button>
+          <button class="section-tab" data-section="summary" role="tab" aria-selected="false">02 <span>Summary</span></button>
+          <button class="section-tab" data-section="experience" role="tab" aria-selected="false">03 <span>Experience</span></button>
+          <button class="section-tab" data-section="education" role="tab" aria-selected="false">04 <span>Education</span></button>
+          <button class="section-tab" data-section="skills" role="tab" aria-selected="false">05 <span>Skills</span></button>
+          <button class="section-tab" data-section="extras" role="tab" aria-selected="false">06 <span>Extras</span></button>
+        </div>
+
+        <form id="resumeForm" autocomplete="on">
+          <section class="form-section active" id="section-personal">
+            <div class="section-title"><div><h3>Personal details</h3><p>How can employers reach you?</p></div><span class="section-icon">✦</span></div>
+            <div class="field-grid">
+              <label class="field full"><span>Full name</span><input id="fullName" name="fullName" placeholder="e.g. Alex Morgan" /></label>
+              <label class="field"><span>Professional title</span><input id="jobTitle" name="jobTitle" placeholder="e.g. UI/UX Designer" /></label>
+              <label class="field"><span>Location</span><input id="location" name="location" placeholder="City, Country" /></label>
+              <label class="field"><span>Email address</span><input id="email" name="email" type="email" placeholder="alex@email.com" /></label>
+              <label class="field"><span>Phone number</span><input id="phone" name="phone" placeholder="+91 98765 43210" /></label>
+              <label class="field full"><span>LinkedIn / Portfolio</span><input id="website" name="website" placeholder="linkedin.com/in/yourname" /></label>
+            </div>
+            <div class="form-actions"><span></span><button class="btn btn-primary next-btn" data-next="summary" type="button">Next: Summary <span>→</span></button></div>
+          </section>
+
+          <section class="form-section" id="section-summary">
+            <div class="section-title"><div><h3>Professional summary</h3><p>A short introduction about your strengths.</p></div><span class="section-icon">✦</span></div>
+            <label class="field"><span>About you</span><textarea id="summary" rows="6" placeholder="Write 2–4 sentences about your experience, strengths, and career goals..."></textarea><small>Tip: Keep it focused on the value you bring to the role.</small></label>
+            <div class="form-actions"><button class="btn btn-quiet prev-btn" data-prev="personal" type="button">← Back</button><button class="btn btn-primary next-btn" data-next="experience" type="button">Next: Experience →</button></div>
+          </section>
+
+          <section class="form-section" id="section-experience">
+            <div class="section-title"><div><h3>Work experience</h3><p>Show the impact you've made.</p></div><span class="section-icon">✦</span></div>
+            <div id="experienceList"></div>
+            <button class="btn btn-add" id="addExperience" type="button">＋ Add experience</button>
+            <div class="form-actions"><button class="btn btn-quiet prev-btn" data-prev="summary" type="button">← Back</button><button class="btn btn-primary next-btn" data-next="education" type="button">Next: Education →</button></div>
+          </section>
+
+          <section class="form-section" id="section-education">
+            <div class="section-title"><div><h3>Education</h3><p>Add your most relevant qualifications.</p></div><span class="section-icon">✦</span></div>
+            <div id="educationList"></div>
+            <button class="btn btn-add" id="addEducation" type="button">＋ Add education</button>
+            <div class="form-actions"><button class="btn btn-quiet prev-btn" data-prev="experience" type="button">← Back</button><button class="btn btn-primary next-btn" data-next="skills" type="button">Next: Skills →</button></div>
+          </section>
+
+          <section class="form-section" id="section-skills">
+            <div class="section-title"><div><h3>Skills</h3><p>Highlight the strengths relevant to your role.</p></div><span class="section-icon">✦</span></div>
+            <label class="field"><span>Your skills</span><textarea id="skills" rows="4" placeholder="JavaScript, Communication, Project Management, Figma..."></textarea><small>Separate each skill with a comma.</small></label>
+            <div class="form-actions"><button class="btn btn-quiet prev-btn" data-prev="education" type="button">← Back</button><button class="btn btn-primary next-btn" data-next="extras" type="button">Next: Extras →</button></div>
+          </section>
+
+          <section class="form-section" id="section-extras">
+            <div class="section-title"><div><h3>Additional details</h3><p>Include projects, certifications, or languages.</p></div><span class="section-icon">✦</span></div>
+            <label class="field"><span>Projects</span><textarea id="projects" rows="3" placeholder="Project name — what you built and the tools you used."></textarea></label>
+            <label class="field"><span>Certifications</span><textarea id="certifications" rows="3" placeholder="Certification name — Issuing organization (Year)"></textarea></label>
+            <label class="field"><span>Languages</span><input id="languages" placeholder="English, Hindi, Telugu" /></label>
+            <div class="form-actions"><button class="btn btn-quiet prev-btn" data-prev="skills" type="button">← Back</button><button class="btn btn-primary" id="finishBtn" type="button">Review my resume ✓</button></div>
+          </section>
+        </form>
+        <div class="privacy-note"><span>🔒</span> Your information stays in this browser. Nothing is uploaded.</div>
+      </aside>
+
+      <section class="preview-area">
+        <div class="preview-toolbar">
+          <div><p class="eyebrow">LIVE PREVIEW</p><h2>Your resume</h2></div>
+          <div class="preview-controls">
+            <label class="template-select"><span>Template</span><select id="templateSelect"><option value="modern">Modern</option><option value="classic">Classic</option><option value="minimal">Minimal</option></select></label>
+            <button class="icon-btn" id="zoomBtn" type="button" title="Fit preview" aria-label="Fit preview">↗</button>
+          </div>
+        </div>
+        <div class="template-cards" aria-label="Choose a resume template">
+          <button class="template-card selected" data-template="modern" type="button"><img src="assets/template-modern.svg" alt="Modern template preview"><span>Modern</span></button>
+          <button class="template-card" data-template="classic" type="button"><img src="assets/template-classic.svg" alt="Classic template preview"><span>Classic</span></button>
+          <button class="template-card" data-template="minimal" type="button"><img src="assets/template-minimal.svg" alt="Minimal template preview"><span>Minimal</span></button>
+        </div>
+        <div class="paper-stage" id="paperStage">
+          <article class="resume-paper template-modern" id="resumePreview" aria-label="Resume preview">
+            <header class="resume-header">
+              <div><h1 id="previewName">Your Name</h1><p class="preview-role" id="previewTitle">Your Professional Title</p></div>
+              <div class="contact-block" id="previewContact"><span>City, Country</span><span>you@example.com</span><span>+91 00000 00000</span></div>
+            </header>
+            <div class="resume-body">
+              <section class="resume-section" id="previewSummarySection"><h2>Profile</h2><p id="previewSummary">Your professional summary will appear here. Add a few sentences about your experience, strengths, and career goals.</p></section>
+              <section class="resume-section" id="previewExperienceSection"><h2>Experience</h2><div id="previewExperience"><p class="empty-hint">Your work experience will appear here.</p></div></section>
+              <section class="resume-section" id="previewEducationSection"><h2>Education</h2><div id="previewEducation"><p class="empty-hint">Your education will appear here.</p></div></section>
+              <section class="resume-section" id="previewSkillsSection"><h2>Skills</h2><div class="skill-list" id="previewSkills"><span class="skill-chip">Your skills</span></div></section>
+              <section class="resume-section" id="previewExtrasSection"><h2>Additional</h2><div id="previewExtras"></div></section>
+            </div>
+            <footer class="resume-footer">Created with ResumeCraft</footer>
+          </article>
+        </div>
+        <p class="preview-tip"><span>✦</span> Your preview updates as you type. Choose “Save as PDF” to print or export.</p>
+      </section>
+    </div>
+    <footer class="site-footer">Made for your next opportunity <span>✦</span></footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
